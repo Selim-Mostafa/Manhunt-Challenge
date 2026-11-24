@@ -29,14 +29,22 @@ jobs:
       - name: Build debug APK
         run: gradle --no-daemon assembleDebug
 
-      - name: Publish APK to GitHub Releases
+      - name: Package iPhone Web App
+        run: |
+          cd iphone-pwa
+          zip -r ../manhunt-iphone-pwa.zip .
+
+      - name: Publish APK and iPhone Web App to GitHub Releases
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.0
           name: Manhunt-challenge v1.0.0
           body: |
-            First public Android APK release of Manhunt-challenge.
+            Manhunt Challenge downloads.
 
-            This is a debug-signed APK build. The app opens the Manhunt Challenge website and requires an internet connection.
-          files: app/build/outputs/apk/debug/app-debug.apk
+            - app-debug.apk: Android app (debug-signed; internet required).
+            - manhunt-iphone-pwa.zip: iPhone web-app source package. The live Home Screen app requires the GitHub Pages deployment to be enabled and uses the hosted Manhunt game website.
+          files: |
+            app/build/outputs/apk/debug/app-debug.apk
+            manhunt-iphone-pwa.zip
           make_latest: true
