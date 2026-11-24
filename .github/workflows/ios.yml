@@ -6,6 +6,9 @@ on:
       - "Manhunt-iOS/**"
       - ".github/workflows/ios.yml"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: macos-15
@@ -35,3 +38,16 @@ jobs:
             Manhunt-iOS-Simulator.zip
             Manhunt-unsigned.ipa
           retention-days: 30
+
+      - name: Publish unsigned IPA to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: manhunt-ios-v1.0.0
+          name: Manhunt iOS v1.0.0 (Unsigned)
+          body: |
+            Manhunt Challenge iOS build.
+
+            IMPORTANT: This IPA is unsigned. It is provided for development/testing and cannot be installed on a normal iPhone until it is signed with a valid Apple developer provisioning profile.
+          files: Manhunt-unsigned.ipa
+          draft: false
+          prerelease: false
