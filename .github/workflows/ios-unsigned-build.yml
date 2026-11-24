@@ -1,0 +1,53 @@
+name: iOS unsigned build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "Manhunt-iOS/**"
+      - ".github/workflows/ios-unsigned-build.yml"
+
+jobs:
+  build-ios:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          xcode-select -p
+          xcodebuild -version
+
+      - name: Build unsigned iOS archive
+        run: |
+          xcodebuild \
+            -project "Manhunt-iOS/Manhunt.xcodeproj" \
+            -scheme "Manhunt" \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/Manhunt.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO \
+            archive
+
+      - name: Package unsigned IPA container (not installable until signed)
+        run: |
+          APP_PATH="$RUNNER_TEMP/Manhunt.xcarchive/Products/Applications/Manhunt.app"
+          test -d "$APP_PATH"
+          mkdir -p "$RUNNER_TEMP/Payload"
+          cp -R "$APP_PATH" "$RUNNER_TEMP/Payload/Manhunt.app"
+          cd "$RUNNER_TEMP"
+          /usr/bin/zip -qry Manhunt-unsigned.ipa Payload
+
+      - name: Upload unsigned build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Manhunt-iOS-unsigned
+          path: |
+            ${{ runner.temp }}/Manhunt-unsigned.ipa
+            ${{ runner.temp }}/Manhunt.xcarchive
+          if-no-files-found: error
+          retention-days: 7
