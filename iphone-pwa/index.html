@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101820">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Manhunt">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <title>Manhunt Challenge</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#101820;color:#fff;font-family:system-ui,-apple-system,sans-serif}
+    main{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+    .panel{max-width:440px}.mark{width:88px;height:88px}.button{display:inline-block;margin-top:18px;padding:14px 22px;border-radius:14px;background:#35c878;color:#07130c;text-decoration:none;font-weight:700}
+    p{line-height:1.55;color:#c6d0d8}
+  </style>
+</head>
+<body>
+<main><section class="panel">
+  <img class="mark" src="./icon.svg" alt="">
+  <h1>Manhunt Challenge</h1>
+  <p>Your iPhone home-screen shortcut for Manhunt Challenge. The game itself loads from the official hosted game site and needs an internet connection.</p>
+  <a class="button" href="https://manhunt-challenge.floot.app/">Open Manhunt</a>
+  <p><small>To install: open this page in Safari, tap Share, then Add to Home Screen.</small></p>
+</section></main>
+<script>
+if ("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
+</body></html>
