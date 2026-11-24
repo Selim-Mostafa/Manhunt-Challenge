@@ -63,17 +63,22 @@ jobs:
           set -euo pipefail
           PROFILE="$RUNNER_TEMP/profile.plist"
           APP_ID=$(/usr/libexec/PlistBuddy -c 'Print :Entitlements:application-identifier' "$PROFILE")
-          TEAM_PREFIX=$(/usr/libexec/PlistBuddy -c 'Print :ApplicationIdentifierPrefix:0' "$PROFILE")
+          PROFILE_TEAM=$(/usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' "$PROFILE")
           BUNDLE_ID="com.selimallamie.manhunt"
-          case "$APP_ID" in
-            "$TEAM_PREFIX.$BUNDLE_ID"|"$TEAM_PREFIX.*") ;;
-            *) echo "::error::Provisioning profile does not match $BUNDLE_ID (profile app ID: $APP_ID)"; exit 1 ;;
-          esac
-          if [ "$TEAM_PREFIX" != "$IOS_TEAM_ID" ]; then
-            echo "::error::Provisioning profile team prefix does not match IOS_TEAM_ID"
+          EXPECTED_APP_ID="$PROFILE_TEAM.$BUNDLE_ID"
+          if [ "$APP_ID" != "$EXPECTED_APP_ID" ]; then
+            echo "::error::Provisioning profile must explicitly match $BUNDLE_ID (profile app ID: $APP_ID)"
             exit 1
           fi
-          echo "Provisioning profile is for $APP_ID"
+          if [ "$PROFILE_TEAM" != "$IOS_TEAM_ID" ]; then
+            echo "::error::Provisioning profile TeamIdentifier does not match IOS_TEAM_ID"
+            exit 1
+          fi
+          if ! /usr/libexec/PlistBuddy -c 'Print :ProvisionedDevices' "$PROFILE" >/dev/null 2>&1; then
+            echo "::error::This must be an Ad Hoc profile with registered device UDIDs"
+            exit 1
+          fi
+          echo "Provisioning profile is for $APP_ID and contains registered devices"
 
       - name: Archive signed iOS app
         env:
