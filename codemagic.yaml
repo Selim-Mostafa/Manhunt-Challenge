@@ -2,9 +2,9 @@ workflows:
   manhunt_ios_unsigned:
     name: Manhunt iOS (unsigned IPA)
     max_build_duration: 30
-    instance_type: mac_mini_m2
+    instance_type: mac_mini_m4
     environment:
-      xcode: 26.5
+      xcode: 26.6
     scripts:
       - name: Check Xcode project and scheme
         script: |
@@ -17,7 +17,7 @@ workflows:
           xcodebuild \
             -project Manhunt-iOS/Manhunt.xcodeproj \
             -scheme Manhunt \
-            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
             -configuration Release \
             -derivedDataPath build-device \
             CODE_SIGNING_ALLOWED=NO \
