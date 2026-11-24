@@ -1,10 +1,17 @@
-# Manhunt Challenge Android
+# Manhunt-challenge
 
-This repository wraps the published Manhunt Challenge website in a lightweight Android WebView app.
+**Manhunt-challenge** is an Android WebView app for the Manhunt Challenge game.
 
-## Build
-Pushing to `main` starts the **Build Android APK** GitHub Actions workflow. The workflow creates a debug APK and uploads it as an artifact named `manhunt-debug-apk`.
+## Download
 
-The app requires internet access to load the published website. It does not request contacts, microphone, or location permissions.
+Get the latest Android APK from the [Releases page](https://github.com/selimmostafaallamie-cloud/Manhunt-apk/releases).
+
+## About
+
+The Android app opens the published Manhunt Challenge website inside a lightweight app shell. An internet connection is required. This wrapper does not add native live-location tracking, contacts access, or in-app calling.
 
 Website: https://manhunt-challenge.floot.app
+
+## Builds
+
+Every push to `main` builds the Android APK and publishes it to the GitHub Release named **Manhunt-challenge v1.0.0**.
