@@ -8,7 +8,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.webkit.WebResourceRequest
 import android.content.Intent
-import android.net.Uri
 
 class MainActivity : Activity() {
     private lateinit var webView: WebView
@@ -22,7 +21,7 @@ class MainActivity : Activity() {
 
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
-        webView.settings loadsImagesAutomatically = true
+        webView.settings.loadsImagesAutomatically = true
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 val uri = request.url
