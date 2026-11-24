@@ -1,0 +1,26 @@
+name: Build Manhunt iOS (Simulator)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "Manhunt-iOS/**"
+      - ".github/workflows/ios.yml"
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Build iOS simulator app
+        run: |
+          xcodebuild -project Manhunt-iOS/Manhunt.xcodeproj -scheme Manhunt -sdk iphonesimulator -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+      - name: Package simulator app
+        run: |
+          cd build/Build/Products/Debug-iphonesimulator
+          zip -r "$GITHUB_WORKSPACE/Manhunt-iOS-Simulator.zip" Manhunt.app
+      - name: Upload simulator build
+        uses: actions/upload-artifact@v4
+        with:
+          name: manhunt-ios-simulator
+          path: Manhunt-iOS-Simulator.zip
+          retention-days: 14
