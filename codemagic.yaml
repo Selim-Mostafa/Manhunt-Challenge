@@ -1,0 +1,32 @@
+workflows:
+  manhunt_ios_unsigned:
+    name: Manhunt iOS (unsigned IPA)
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      xcode: latest
+    scripts:
+      - name: Check Xcode project and scheme
+        script: |
+          xcodebuild -list -project Manhunt-iOS/Manhunt.xcodeproj
+      - name: Build iPhone app without code signing
+        script: |
+          set -e
+          xcodebuild \
+            -project Manhunt-iOS/Manhunt.xcodeproj \
+            -scheme Manhunt \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath build-device \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+      - name: Package unsigned IPA
+        script: |
+          set -e
+          APP_PATH="build-device/Build/Products/Release-iphoneos/Manhunt.app"
+          test -d "$APP_PATH"
+          mkdir -p ipa/Payload
+          cp -R "$APP_PATH" ipa/Payload/
+          (cd ipa && zip -r "$CM_BUILD_DIR/Manhunt-unsigned.ipa" Payload)
+    artifacts:
+      - Manhunt-unsigned.ipa
