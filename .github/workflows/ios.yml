@@ -1,26 +1,37 @@
-name: Build Manhunt iOS (Simulator)
+name: Build Manhunt iOS
 on:
   workflow_dispatch:
   push:
     paths:
       - "Manhunt-iOS/**"
       - ".github/workflows/ios.yml"
+
 jobs:
   build:
     runs-on: macos-15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-      - name: Build iOS simulator app
+
+      - name: Build iOS Simulator app
         run: |
-          xcodebuild -project Manhunt-iOS/Manhunt.xcodeproj -scheme Manhunt -sdk iphonesimulator -configuration Debug -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
-      - name: Package simulator app
-        run: |
-          cd build/Build/Products/Debug-iphonesimulator
+          xcodebuild -project Manhunt-iOS/Manhunt.xcodeproj -scheme Manhunt -sdk iphonesimulator -configuration Release -derivedDataPath build-sim CODE_SIGNING_ALLOWED=NO build
+          cd build-sim/Build/Products/Release-iphonesimulator
           zip -r "$GITHUB_WORKSPACE/Manhunt-iOS-Simulator.zip" Manhunt.app
-      - name: Upload simulator build
+
+      - name: Build unsigned iPhone device app
+        run: |
+          xcodebuild -project Manhunt-iOS/Manhunt.xcodeproj -scheme Manhunt -sdk iphoneos -configuration Release -derivedDataPath build-device CODE_SIGNING_ALLOWED=NO build
+          mkdir -p ipa/Payload
+          cp -R build-device/Build/Products/Release-iphoneos/Manhunt.app ipa/Payload/
+          cd ipa
+          zip -r "$GITHUB_WORKSPACE/Manhunt-unsigned.ipa" Payload
+
+      - name: Upload iOS build files
         uses: actions/upload-artifact@v4
         with:
-          name: manhunt-ios-simulator
-          path: Manhunt-iOS-Simulator.zip
-          retention-days: 14
+          name: manhunt-ios-builds
+          path: |
+            Manhunt-iOS-Simulator.zip
+            Manhunt-unsigned.ipa
+          retention-days: 30
