@@ -27,7 +27,7 @@ assert.match(html, /location\.status/);
 assert.match(html, /Your coordinates were not sent to the room/);
 assert.doesNotMatch(html, /radius:500|500 m bounded play area/);
 assert.match(html, /No fixed-radius boundary is applied/);
-assert.match(html, /Exact GPS coordinates stay on this device/);
+assert.match(html, /My exact GPS coordinates stay on this device/);
 assert.match(html, /GPS coordinates are never sent to other players/);
 assert.match(html, /function assignTeams\(\)/);
 assert.match(html, /function round\(action\)/);
