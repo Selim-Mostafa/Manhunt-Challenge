@@ -17,6 +17,7 @@ assert.match(html, /serviceWorker\.register/);
 assert.match(html, /navigator\.geolocation\.getCurrentPosition/);
 assert.match(html, /navigator\.geolocation\.watchPosition/);
 assert.match(html, /function roundedGameZone\(lat,lng\)/);
+assert.match(html, /p\.location=\{\.\.\.roundedGameZone\(raw\.lat,raw\.lng\),status,updatedAt:Date\.now\(\)\}/, 'Host must quantize and validate every received location update');
 assert.match(html, /Math\.round\(lat\*100\)\/100/);
 assert.match(html, /Math\.round\(lng\*100\)\/100/);
 assert.match(html, /function startPlayerLocationSharing\(\)/);
