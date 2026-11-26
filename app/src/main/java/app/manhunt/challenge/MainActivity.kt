@@ -22,7 +22,7 @@ class MainActivity : Activity() {
     private lateinit var webView: WebView
     private var pendingAudioRequest: PermissionRequest? = null
     private val preferences by lazy { getSharedPreferences("manhunt_settings", Context.MODE_PRIVATE) }
-    private val homeUrl = "https://manhunt-challenge.floot.app"
+    private val homeUrl = "https://selim-mostafa.github.io/Manhunt-Challenge/"
     private val audioPermissionRequest = 1001
     private val notificationPermissionRequest = 1002
     private val notificationChannelId = "manhunt_game_events"
@@ -61,7 +61,7 @@ class MainActivity : Activity() {
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 val uri = request.url
-                return if (uri.scheme == "https" && uri.host == "manhunt-challenge.floot.app") {
+                return if (uri.scheme == "https" && uri.host == "selim-mostafa.github.io") {
                     false
                 } else {
                     startActivity(Intent(Intent.ACTION_VIEW, uri))
