@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Manhunt Challenge",
   "short_name": "Manhunt",
-  "description": "Home-screen app for Manhunt Challenge",
+  "description": "Multiplayer Manhunt game with fictional team zones and peer-to-peer voice calls.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -10,6 +10,11 @@
   "background_color": "#101820",
   "theme_color": "#101820",
   "icons": [
-    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }
