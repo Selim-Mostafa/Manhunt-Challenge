@@ -7,7 +7,7 @@ const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map(m => m[
 assert.ok(scripts.length, 'PWA must contain its application script');
 for (const [i, source] of scripts.entries()) new vm.Script(source, { filename: `inline-script-${i}.js` });
 
-const requiredIds = ['auth','accountEmail','accountPassword','authSubmit','welcome','createBtn','joinBtn','confirmJoin','game','roundClock','invitePlayers','assignTeams','startRound','pauseRound','endRound','callRoster','acceptCall','declineCall','endCall','notifyBtn','logoutBtn','leaveBtn'];
+const requiredIds = ['auth','accountEmail','accountPassword','authSubmit','welcome','createBtn','joinBtn','confirmJoin','game','roundClock','invitePlayers','pauseZoneSharing','clearMap','openMap','assignTeams','startRound','pauseRound','endRound','callRoster','acceptCall','declineCall','endCall','notifyBtn','logoutBtn','leaveBtn'];
 for (const id of requiredIds) assert.match(html, new RegExp(`id=["']${id}["']`), `Missing required UI control: ${id}`);
 
 assert.match(html, /PBKDF2/);
