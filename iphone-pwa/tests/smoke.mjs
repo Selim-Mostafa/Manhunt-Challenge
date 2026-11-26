@@ -10,8 +10,15 @@ for (const [i, source] of scripts.entries()) new vm.Script(source, { filename: `
 const requiredIds = ['playerLocationConsent','startPlayerSharing','pausePlayerSharing','stopPlayerSharing','myLocationStatus','auth','accountEmail','accountPassword','authSubmit','welcome','createBtn','joinBtn','confirmJoin','game','roundClock','invitePlayers','centerMyLocation','pauseZoneSharing','clearMap','openMap','assignTeams','startRound','pauseRound','endRound','callRoster','acceptCall','declineCall','endCall','notifyBtn','logoutBtn','leaveBtn'];
 for (const id of requiredIds) assert.match(html, new RegExp(`id=["']${id}["']`), `Missing required UI control: ${id}`);
 
-assert.match(html, /PBKDF2/);
-assert.match(html, /iterations:180000/);
+assert.match(html, /window\.supabase\.createClient/);
+assert.match(html, /persistSession:true/);
+assert.match(html, /auth\.signUp/);
+assert.match(html, /auth\.signInWithPassword/);
+assert.match(html, /rpc\('create_game_room'/);
+assert.match(html, /rpc\('join_game_room'/);
+assert.match(html, /rpc\('host_assign_game_teams'/);
+assert.match(html, /rpc\('host_update_game_room'/);
+assert.match(html, /postgres_changes/);
 assert.match(html, /getUserMedia\(\{audio:true,video:false\}\)/);
 assert.match(html, /serviceWorker\.register/);
 assert.match(html, /navigator\.geolocation\.getCurrentPosition/);
