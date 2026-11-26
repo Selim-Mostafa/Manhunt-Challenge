@@ -21,10 +21,13 @@ import android.webkit.WebViewClient
 class MainActivity : Activity() {
     private lateinit var webView: WebView
     private var pendingAudioRequest: PermissionRequest? = null
+    private var pendingLocationOrigin: String? = null
+    private var pendingLocationCallback: android.webkit.GeolocationPermissions.Callback? = null
     private val preferences by lazy { getSharedPreferences("manhunt_settings", Context.MODE_PRIVATE) }
     private val homeUrl = "https://selim-mostafa.github.io/Manhunt-Challenge/"
     private val audioPermissionRequest = 1001
     private val notificationPermissionRequest = 1002
+    private val locationPermissionRequest = 1003
     private val notificationChannelId = "manhunt_game_events"
 
     private inner class ManhuntBridge {
@@ -70,6 +73,16 @@ class MainActivity : Activity() {
             }
         }
         webView.webChromeClient = object : WebChromeClient() {
+            override fun onGeolocationPermissionsShowPrompt(origin: String, callback: android.webkit.GeolocationPermissions.Callback) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    callback.invoke(origin, true, false)
+                } else {
+                    pendingLocationOrigin = origin
+                    pendingLocationCallback = callback
+                    requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), locationPermissionRequest)
+                }
+            }
+
             override fun onPermissionRequest(request: PermissionRequest) {
                 val audioOnly = request.resources.isNotEmpty() &&
                     request.resources.all { it == PermissionRequest.RESOURCE_AUDIO_CAPTURE }
@@ -162,6 +175,14 @@ class MainActivity : Activity() {
                 if (granted) createNotificationChannel()
                 notifyPagePermission(granted)
             }
+            locationPermissionRequest -> {
+                val granted = grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED
+                val origin = pendingLocationOrigin
+                val callback = pendingLocationCallback
+                pendingLocationOrigin = null
+                pendingLocationCallback = null
+                if (origin != null && callback != null) callback.invoke(origin, granted, false)
+            }
         }
     }
 
@@ -173,6 +194,9 @@ class MainActivity : Activity() {
     override fun onDestroy() {
         pendingAudioRequest?.deny()
         pendingAudioRequest = null
+        pendingLocationCallback?.invoke(pendingLocationOrigin ?: "", false, false)
+        pendingLocationCallback = null
+        pendingLocationOrigin = null
         if (::webView.isInitialized) {
             webView.removeJavascriptInterface("AndroidManhunt")
             webView.destroy()
