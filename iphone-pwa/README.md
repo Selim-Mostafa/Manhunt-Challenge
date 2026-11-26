@@ -1,15 +1,26 @@
-# Manhunt Challenge — iPhone Web App
+# Manhunt Challenge — GitHub-hosted iPhone PWA
 
-This is a Progressive Web App (PWA) home-screen shell for the existing Manhunt Challenge website.
+This is the actual Manhunt game frontend, hosted by GitHub Pages. It no longer redirects to the previous hosted-game provider.
 
 ## Install on iPhone
-1. Open the deployed HTTPS page in Safari.
-2. Tap **Share**.
-3. Choose **Add to Home Screen**.
-4. Open the Manhunt icon from the Home Screen.
+1. Open the GitHub Pages URL in Safari.
+2. Tap Share.
+3. Choose Add to Home Screen.
+4. Open Manhunt from the Home Screen.
 
-The game opens at https://manhunt-challenge.floot.app/ and requires an internet connection. This package does not turn the game into a native iOS app or an IPA.
+## Multiplayer and calls
+- A host creates a six-character room code.
+- Other players join using that code.
+- The host can assign Hunter/Hider teams and control the round state.
+- Voice calls use browser microphone permission only when a player starts or accepts a call.
+- Peer-to-peer connections use PeerJS signalling infrastructure; each player needs a network connection and the host must remain connected for the room to stay available.
+
+## Location and safety
+This game uses fictional team zones only. It does not request GPS permission, collect precise location, or show real-world player positions. Play only in agreed, supervised areas.
+
+## Notifications and limitations
+The app can show in-app alerts and browser notifications while supported by the browser. GitHub Pages is static hosting and cannot send reliable background push notifications by itself. A push provider/backend would be needed for that feature.
 
 ## Hosting
-The included GitHub Pages workflow publishes this folder from the repository's `iphone-pwa/` directory. Once Pages is enabled for the repository, the install page is:
-`https://selim-mostafa.github.io/Manhunt-Challenge/`
+The GitHub Actions workflow deploys the iphone-pwa folder to:
+https://selim-mostafa.github.io/Manhunt-Challenge/
